@@ -3,6 +3,7 @@
 import { useTheme } from "@/components/theme-provider";
 import { useHideValues } from "@/components/hide-values-provider";
 import { PushSubscribeButton } from "@/components/PushSubscribeButton";
+import { SecuritySetup } from "@/components/SecuritySetup";
 
 const pillStyle: React.CSSProperties = {
   display: "flex",
@@ -23,7 +24,7 @@ export function AppTopBar() {
   const { hideValues, toggleHideValues } = useHideValues();
 
   return (
-    <div className="flex items-center justify-end gap-2 px-5 pt-3">
+    <div className="flex flex-wrap items-center justify-end gap-2 px-5 pt-3">
       <button onClick={toggleTheme} style={pillStyle} aria-label="Toggle theme">
         {theme === "dark" ? (
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
@@ -73,6 +74,7 @@ export function AppTopBar() {
       </button>
 
       <PushSubscribeButton />
+      <SecuritySetup />
     </div>
   );
 }
