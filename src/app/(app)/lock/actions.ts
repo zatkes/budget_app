@@ -38,12 +38,15 @@ async function readAndClearChallengeCookie(): Promise<string | null> {
   return value;
 }
 
+// Fails safe (no lock) rather than throwing - these run on every page load
+// via the (app) layout, so a not-yet-applied migration should degrade to
+// "lock feature inactive," not take down the whole app.
 export async function hasAnyCredential(): Promise<boolean> {
   const supabase = await createClient();
   const { count, error } = await supabase
     .from("webauthn_credentials")
     .select("id", { count: "exact", head: true });
-  if (error) throw error;
+  if (error) return false;
   return (count ?? 0) > 0;
 }
 
@@ -165,7 +168,7 @@ export async function verifyAuthentication(
 export async function hasPinSet(): Promise<boolean> {
   const supabase = await createClient();
   const { count, error } = await supabase.from("device_pin").select("id", { count: "exact", head: true });
-  if (error) throw error;
+  if (error) return false;
   return (count ?? 0) > 0;
 }
 
